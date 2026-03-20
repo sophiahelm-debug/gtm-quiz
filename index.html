@@ -106,7 +106,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 var CONFIG = {
   title: "GTM Weekly Update - CW15",
   subtitle: "3 questions · ~2 minutes · Results visible immediately",
-  webhook: "https://script.google.com/macros/s/AKfycbwjS1FZoq5vNa_y1Av3csxZ1f1__Co9G_9yH3IJY-mJCFw95zJYoMl-FFkEzkmGRSLm/exec",
+  webhook: "", // not used - Google Form is hardcoded below
   questions: [
     {
       topic: "Sales Announcement Channel",
@@ -263,10 +263,14 @@ function showResults() {
     bd.appendChild(row);
   }
   document.getElementById("screen-res").className = "results show";
-  if (CONFIG.webhook) {
-    var img = new Image();
-    img.src = CONFIG.webhook + "?name=" + encodeURIComponent(userName) + "&timestamp=" + encodeURIComponent(new Date().toISOString()) + "&cw=" + encodeURIComponent(CONFIG.title) + "&score=" + encodeURIComponent(score + "/" + total) + "&pct=" + encodeURIComponent(pct + "%");
-  }
+  // Submit to Google Form
+  var formUrl = "https://docs.google.com/forms/d/1EecsS7WSTtGPEotliq2swxBCr-2fFwd0JnBX_qbDnHk/formResponse";
+  var params = "entry.1886770242=" + encodeURIComponent(userName)
+    + "&entry.1279331789=" + encodeURIComponent(CONFIG.title)
+    + "&entry.1794277357=" + encodeURIComponent(score + "/" + total)
+    + "&entry.2089584864=" + encodeURIComponent(pct + "%");
+  var img = new Image();
+  img.src = formUrl + "?" + params;
 }
 </script>
 </body>
