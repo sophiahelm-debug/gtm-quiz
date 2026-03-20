@@ -5,436 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GTM Knowledge Check</title>
 <style>
-  /* ── reset & base ── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f4f5f7;
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 32px 16px 48px;
-  }
-
-  .quiz-wrap {
-    width: 100%;
-    max-width: 680px;
-  }
-
-  /* ── header ── */
-  .quiz-header {
-    background: #1868DB;
-    border-radius: 12px 12px 0 0;
-    padding: 24px 28px 20px;
-  }
-  .quiz-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.18);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-  }
-  .quiz-title {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 4px;
-  }
-  .quiz-subtitle {
-    color: rgba(255,255,255,0.72);
-    font-size: 13px;
-  }
-
-  /* ── progress bar ── */
-  .progress-bar-wrap {
-    background: #fff;
-    padding: 12px 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid #e8e8e8;
-  }
-  .progress-track {
-    flex: 1;
-    height: 4px;
-    background: #e8e8e8;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: #1868DB;
-    border-radius: 2px;
-    transition: width 0.4s ease;
-  }
-  .progress-label {
-    font-size: 12px;
-    color: #6b7280;
-    white-space: nowrap;
-    min-width: 56px;
-    text-align: right;
-  }
-
-  /* ── card ── */
-  .quiz-card {
-    background: #fff;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    overflow: hidden;
-  }
-
-  /* ── question screen ── */
-  .question-screen {
-    padding: 28px 28px 24px;
-  }
-  .question-topic {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: #1868DB;
-    margin-bottom: 8px;
-  }
-  .question-text {
-    font-size: 17px;
-    font-weight: 600;
-    color: #111827;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
-
-  /* ── options ── */
-  .options-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-  .option-btn {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    width: 100%;
-    padding: 14px 16px;
-    background: #f9fafb;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
-    font-size: 14.5px;
-    color: #374151;
-    font-family: inherit;
-    transition: all 0.15s ease;
-    line-height: 1.4;
-  }
-  .option-btn:hover:not(:disabled) {
-    background: #eff6ff;
-    border-color: #93c5fd;
-    color: #1e40af;
-  }
-  .option-letter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    font-size: 12px;
-    font-weight: 700;
-    color: #6b7280;
-    transition: all 0.15s ease;
-  }
-  .option-btn:hover:not(:disabled) .option-letter {
-    background: #bfdbfe;
-    color: #1e40af;
-  }
-
-  /* answered states */
-  .option-btn.correct {
-    background: #f0fdf4;
-    border-color: #22c55e;
-    color: #166534;
-  }
-  .option-btn.correct .option-letter {
-    background: #22c55e;
-    color: #fff;
-  }
-  .option-btn.wrong {
-    background: #fef2f2;
-    border-color: #f87171;
-    color: #991b1b;
-  }
-  .option-btn.wrong .option-letter {
-    background: #f87171;
-    color: #fff;
-  }
-  .option-btn.dimmed {
-    opacity: 0.45;
-  }
-  .option-btn:disabled { cursor: default; }
-
-  /* ── feedback box ── */
-  .feedback {
-    display: none;
-    padding: 14px 16px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-  .feedback.correct {
-    display: block;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    color: #166534;
-  }
-  .feedback.wrong {
-    display: block;
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
-  }
-  .feedback-icon { font-weight: 700; margin-right: 4px; }
-
-  /* ── nav buttons ── */
-  .nav-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-  .btn-next {
-    margin-left: auto;
-    padding: 11px 22px;
-    background: #1868DB;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: background 0.15s;
-    display: none;
-  }
-  .btn-next:hover { background: #1558c0; }
-  .btn-next.visible { display: inline-flex; align-items: center; gap: 6px; }
-
-  /* ── results screen ── */
-  .results-screen {
-    display: none;
-    padding: 36px 28px 32px;
-    text-align: center;
-  }
-  .results-screen.visible { display: block; }
-  .results-score-ring {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: 800;
-  }
-  .results-score-ring.great { background: #f0fdf4; color: #16a34a; border: 3px solid #22c55e; }
-  .results-score-ring.ok    { background: #fefce8; color: #a16207; border: 3px solid #eab308; }
-  .results-score-ring.low   { background: #fef2f2; color: #dc2626; border: 3px solid #f87171; }
-
-  .results-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 6px;
-  }
-  .results-sub {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 28px;
-    line-height: 1.5;
-  }
-  .results-breakdown {
-    text-align: left;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
-  .result-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 13.5px;
-  }
-  .result-row:last-child { border-bottom: none; }
-  .result-icon { font-size: 16px; margin-top: 1px; }
-  .result-q { color: #374151; line-height: 1.4; }
-  .result-q strong { color: #111827; display: block; margin-bottom: 2px; }
-
-  .btn-retry {
-    padding: 11px 22px;
-    background: transparent;
-    color: #1868DB;
-    border: 1.5px solid #1868DB;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-retry:hover { background: #eff6ff; }
-
-  /* ── name screen ── */
-  .name-screen {
-    padding: 36px 28px 32px;
-    text-align: center;
-  }
-  .name-screen h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 8px;
-  }
-  .name-screen p {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 24px;
-    line-height: 1.5;
-  }
-  .name-input-wrap {
-    display: flex;
-    gap: 10px;
-    max-width: 380px;
-    margin: 0 auto;
-  }
-  .name-input {
-    flex: 1;
-    padding: 11px 14px;
-    border: 1.5px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    color: #111827;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .name-input:focus { border-color: #1868DB; }
-  .btn-start {
-    padding: 11px 20px;
-    background: #1868DB;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-  }
-  .btn-start:hover { background: #1558c0; }
-  .name-error {
-    color: #dc2626;
-    font-size: 12.5px;
-    margin-top: 8px;
-    text-align: center;
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f5f7;padding:32px 16px 48px;display:flex;justify-content:center}
+.wrap{width:100%;max-width:660px}
+.header{background:#1868DB;border-radius:12px 12px 0 0;padding:24px 28px 20px}
+.badge{display:inline-block;background:rgba(255,255,255,0.18);color:#fff;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:10px}
+.header h1{color:#fff;font-size:20px;font-weight:700;margin-bottom:4px}
+.header p{color:rgba(255,255,255,0.72);font-size:13px}
+.card{background:#fff;border-radius:0 0 12px 12px;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+.prog-bar{padding:12px 28px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e8e8e8}
+.prog-track{flex:1;height:4px;background:#e8e8e8;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#1868DB;border-radius:2px;transition:width .4s ease}
+.prog-lbl{font-size:12px;color:#6b7280;min-width:40px;text-align:right}
+.screen{padding:28px 28px 24px}
+.name-title{font-size:18px;font-weight:700;color:#111827;margin-bottom:8px;text-align:center}
+.name-sub{font-size:14px;color:#6b7280;margin-bottom:24px;text-align:center;line-height:1.5}
+.name-row{display:flex;gap:10px;max-width:400px;margin:0 auto}
+.name-input{flex:1;padding:11px 14px;border:1.5px solid #d1d5db;border-radius:8px;font-size:14px;font-family:inherit;outline:none}
+.name-input:focus{border-color:#1868DB}
+.btn-primary{padding:11px 20px;background:#1868DB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap}
+.btn-primary:hover{background:#1558c0}
+.name-err{color:#dc2626;font-size:12px;margin-top:8px;text-align:center;min-height:16px}
+.q-topic{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#1868DB;margin-bottom:8px}
+.q-text{font-size:17px;font-weight:600;color:#111827;line-height:1.5;margin-bottom:24px}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:8px;cursor:pointer;text-align:left;font-size:14.5px;color:#374151;font-family:inherit;transition:all .15s;line-height:1.4}
+.opt:hover:not(:disabled){background:#eff6ff;border-color:#93c5fd;color:#1e40af}
+.opt-letter{display:flex;align-items:center;justify-content:center;width:28px;height:28px;min-width:28px;border-radius:50%;background:#e5e7eb;font-size:12px;font-weight:700;color:#6b7280;transition:all .15s}
+.opt:hover:not(:disabled) .opt-letter{background:#bfdbfe;color:#1e40af}
+.opt.correct{background:#f0fdf4;border-color:#22c55e;color:#166534}
+.opt.correct .opt-letter{background:#22c55e;color:#fff}
+.opt.wrong{background:#fef2f2;border-color:#f87171;color:#991b1b}
+.opt.wrong .opt-letter{background:#f87171;color:#fff}
+.opt.dimmed{opacity:.4}
+.opt:disabled{cursor:default}
+.feedback{display:none;padding:14px 16px;border-radius:8px;font-size:13.5px;line-height:1.5;margin-bottom:20px}
+.feedback.show-correct{display:block;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.feedback.show-wrong{display:block;background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.nav{display:flex;justify-content:flex-end}
+.btn-next{padding:11px 22px;background:#1868DB;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;display:none}
+.btn-next:hover{background:#1558c0}
+.btn-next.show{display:block}
+.results{padding:36px 28px 32px;text-align:center;display:none}
+.results.show{display:block}
+.score-ring{width:96px;height:96px;border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
+.ring-great{background:#f0fdf4;color:#16a34a;border:3px solid #22c55e}
+.ring-ok{background:#fefce8;color:#a16207;border:3px solid #eab308}
+.ring-low{background:#fef2f2;color:#dc2626;border:3px solid #f87171}
+.res-title{font-size:20px;font-weight:700;color:#111827;margin-bottom:6px}
+.res-sub{font-size:14px;color:#6b7280;margin-bottom:28px;line-height:1.5}
+.breakdown{text-align:left;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:24px}
+.res-row{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid #e5e7eb;font-size:13.5px}
+.res-row:last-child{border-bottom:none}
+.res-q{color:#374151;line-height:1.4}
+.res-q strong{color:#111827;display:block;margin-bottom:2px}
+.btn-retry{padding:11px 22px;background:transparent;color:#1868DB;border:1.5px solid #1868DB;border-radius:8px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
+.btn-retry:hover{background:#eff6ff}
 </style>
 </head>
 <body>
-
-<div class="quiz-wrap">
-  <div class="quiz-header">
-    <div class="quiz-badge">✅ Knowledge Check</div>
-    <div class="quiz-title" id="quiz-title">GTM Weekly Update – CW15</div>
-    <div class="quiz-subtitle" id="quiz-subtitle">3 questions · ~2 minutes · Results visible immediately</div>
+<div class="wrap">
+  <div class="header">
+    <div class="badge">&#10003; Knowledge Check</div>
+    <h1 id="hdr-title">GTM Weekly Update</h1>
+    <p id="hdr-sub">3 questions</p>
   </div>
-
-  <div class="quiz-card">
-
-    <!-- NAME SCREEN -->
-    <div class="name-screen" id="name-screen">
-      <h2>Before we start</h2>
-      <p>Enter your name so your result can be tracked in the team scorecard.</p>
-      <div class="name-input-wrap">
-        <input class="name-input" type="text" id="user-name" placeholder="Your name…" autocomplete="off"/>
-        <button class="btn-start" onclick="startQuiz()">Start →</button>
+  <div class="card">
+    <div class="prog-bar" id="prog" style="display:none">
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-lbl" id="prog-lbl">1 / 3</div>
+    </div>
+    <div class="screen" id="screen-name">
+      <p class="name-title">Before we start</p>
+      <p class="name-sub">Enter your name so your result can be tracked in the team scorecard.</p>
+      <div class="name-row">
+        <input class="name-input" id="inp-name" type="text" placeholder="Your name..." autocomplete="off">
+        <button class="btn-primary" id="btn-start">Start &#8594;</button>
       </div>
-      <div class="name-error" id="name-error"></div>
+      <p class="name-err" id="name-err"></p>
     </div>
-
-    <!-- PROGRESS BAR (hidden until quiz starts) -->
-    <div class="progress-bar-wrap" id="progress-wrap" style="display:none">
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="progress-label" id="progress-label">1 / 3</div>
-    </div>
-
-    <!-- QUESTION SCREEN -->
-    <div class="question-screen" id="question-screen" style="display:none">
-      <div class="question-topic" id="q-topic"></div>
-      <div class="question-text" id="q-text"></div>
-      <div class="options-list" id="options-list"></div>
+    <div class="screen" id="screen-q" style="display:none">
+      <div class="q-topic" id="q-topic"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="opts"></div>
       <div class="feedback" id="feedback"></div>
-      <div class="nav-row">
-        <span style="font-size:12px;color:#9ca3af" id="q-counter"></span>
-        <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next →</button>
+      <div class="nav">
+        <button class="btn-next" id="btn-next">Next &#8594;</button>
       </div>
     </div>
-
-    <!-- RESULTS SCREEN -->
-    <div class="results-screen" id="results-screen">
-      <div class="results-score-ring" id="score-ring"></div>
-      <div class="results-title" id="results-title"></div>
-      <div class="results-sub" id="results-sub"></div>
-      <div class="results-breakdown" id="results-breakdown"></div>
-      <button class="btn-retry" onclick="resetQuiz()">↩ Try again</button>
+    <div class="results" id="screen-res">
+      <div class="score-ring" id="score-ring"></div>
+      <div class="res-title" id="res-title"></div>
+      <div class="res-sub" id="res-sub"></div>
+      <div class="breakdown" id="breakdown"></div>
+      <button class="btn-retry" id="btn-retry">&#8592; Try again</button>
     </div>
-
   </div>
 </div>
-
 <script>
-// ════════════════════════════════════════════════
-// QUIZ CONFIGURATION – edit this section each week
-// ════════════════════════════════════════════════
-const QUIZ_CONFIG = {
-  title:    "GTM Weekly Update – CW15",
+var CONFIG = {
+  title: "GTM Weekly Update - CW15",
   subtitle: "3 questions · ~2 minutes · Results visible immediately",
-
-  // Google Sheets Web App URL for tracking (set to null to disable)
-  // How to set up: Tools > Script editor > paste the Apps Script > Deploy as Web App
-  sheetsWebhook: null, // e.g. "https://script.google.com/macros/s/YOUR_ID/exec"
-
+  webhook: "",
   questions: [
     {
       topic: "Sales Announcement Channel",
       question: "What is the primary purpose of the #sales_org Slack channel in the new framework?",
-      type: "mc", // "mc" = multiple choice, "tf" = true/false
+      type: "mc",
       options: [
         "A place for the sales team to discuss deals and share wins",
         "The single notification layer for all sales-facing updates, linking to Confluence",
         "A channel managed by individual team leads to share their team updates",
         "A replacement for the existing weekly all-hands meeting"
       ],
-      correct: 1, // index of correct option (0-based)
-      explanation: "Correct! #sales_org is the single source of truth for all updates – GTM Enablement posts only, always linking to the full content on Confluence."
+      correct: 1,
+      explanation: "Correct! #sales_org is the single notification layer - GTM Enablement posts only, always linking to full content on Confluence."
     },
     {
       topic: "Tiered Communication Model",
@@ -442,175 +127,146 @@ const QUIZ_CONFIG = {
       type: "tf",
       options: ["True", "False"],
       correct: 0,
-      explanation: "True! Tier 1 (Strategic) items are controversial or structural changes that require leadership pre-alignment before going to the wider team."
+      explanation: "True! Tier 1 (Strategic) items require leadership pre-alignment before going to the wider team."
     },
     {
       topic: "Team Lead Accountability",
       question: "What happens to teams that consistently score low on the adoption scorecard?",
       type: "mc",
       options: [
-        "Nothing – the scorecard is for information purposes only",
+        "Nothing - the scorecard is for information purposes only",
         "They are removed from the #sales_org channel",
-        "Their performance is escalated to VPs/Heads of Functions",
+        "Their performance is escalated to VPs / Heads of Functions",
         "GTM Enablement sends them a private warning message"
       ],
       correct: 2,
-      explanation: "Correct! Chronic low performers are escalated to their VPs/HOs, and this is eventually linked to formal performance reviews."
+      explanation: "Correct! Chronic low performers are escalated to their VPs/HOs and eventually linked to formal performance reviews."
     }
   ]
 };
-// ════════════════════════════════════════════════
 
-let currentQ    = 0;
-let answers     = [];
-let userName    = "";
-let answered    = false;
+var currentQ = 0;
+var answers = [];
+var answered = false;
+var userName = "";
 
-function startQuiz() {
-  const input = document.getElementById("user-name");
-  userName = input.value.trim();
+document.getElementById("hdr-title").textContent = CONFIG.title;
+document.getElementById("hdr-sub").textContent = CONFIG.subtitle;
+
+document.getElementById("btn-start").addEventListener("click", function() {
+  userName = document.getElementById("inp-name").value.trim();
   if (!userName) {
-    document.getElementById("name-error").textContent = "Please enter your name to continue.";
-    input.focus();
+    document.getElementById("name-err").textContent = "Please enter your name to continue.";
     return;
   }
-  document.getElementById("name-screen").style.display    = "none";
-  document.getElementById("progress-wrap").style.display  = "flex";
-  document.getElementById("question-screen").style.display = "block";
-  document.getElementById("quiz-title").textContent    = QUIZ_CONFIG.title;
-  document.getElementById("quiz-subtitle").textContent = QUIZ_CONFIG.subtitle;
-  renderQuestion();
-}
+  document.getElementById("screen-name").style.display = "none";
+  document.getElementById("prog").style.display = "flex";
+  document.getElementById("screen-q").style.display = "block";
+  showQuestion();
+});
 
-function renderQuestion() {
-  answered = false;
-  const q   = QUIZ_CONFIG.questions[currentQ];
-  const tot = QUIZ_CONFIG.questions.length;
-
-  // progress
-  const pct = (currentQ / tot) * 100;
-  document.getElementById("progress-fill").style.width = pct + "%";
-  document.getElementById("progress-label").textContent = (currentQ + 1) + " / " + tot;
-  document.getElementById("q-counter").textContent      = "Question " + (currentQ + 1) + " of " + tot;
-
-  document.getElementById("q-topic").textContent = q.topic;
-  document.getElementById("q-text").textContent  = q.question;
-
-  const letters = ["A", "B", "C", "D"];
-  const tfLabels = ["True", "False"];
-  const opts     = q.type === "tf" ? tfLabels : q.options;
-
-  const list = document.getElementById("options-list");
-  list.innerHTML = "";
-  opts.forEach((opt, i) => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-    btn.onclick   = () => selectAnswer(i);
-    btn.innerHTML = `<span class="option-letter">${q.type === "tf" ? (i === 0 ? "T" : "F") : letters[i]}</span>${opt}`;
-    list.appendChild(btn);
-  });
-
-  document.getElementById("feedback").className  = "feedback";
-  document.getElementById("feedback").innerHTML  = "";
-  document.getElementById("btn-next").className  = "btn-next";
-}
-
-function selectAnswer(idx) {
-  if (answered) return;
-  answered = true;
-
-  const q    = QUIZ_CONFIG.questions[currentQ];
-  const btns = document.querySelectorAll(".option-btn");
-  const isCorrect = idx === q.correct;
-
-  answers.push({ question: q.question, topic: q.topic, chosen: idx, correct: q.correct, isCorrect });
-
-  btns.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === q.correct) { btn.classList.add("correct"); }
-    else if (i === idx && !isCorrect) { btn.classList.add("wrong"); }
-    else { btn.classList.add("dimmed"); }
-  });
-
-  const fb = document.getElementById("feedback");
-  fb.className = "feedback " + (isCorrect ? "correct" : "wrong");
-  fb.innerHTML = `<span class="feedback-icon">${isCorrect ? "✓" : "✗"}</span> ${q.explanation}`;
-
-  const isLast = currentQ === QUIZ_CONFIG.questions.length - 1;
-  const btn    = document.getElementById("btn-next");
-  btn.className = "btn-next visible";
-  btn.textContent = isLast ? "See results" : "Next →";
-}
-
-function nextQuestion() {
+document.getElementById("btn-next").addEventListener("click", function() {
   currentQ++;
-  if (currentQ >= QUIZ_CONFIG.questions.length) {
+  if (currentQ >= CONFIG.questions.length) {
     showResults();
   } else {
-    renderQuestion();
+    showQuestion();
   }
+});
+
+document.getElementById("btn-retry").addEventListener("click", function() {
+  currentQ = 0;
+  answers = [];
+  answered = false;
+  document.getElementById("screen-res").className = "results";
+  document.getElementById("prog").style.display = "flex";
+  document.getElementById("screen-q").style.display = "block";
+  showQuestion();
+});
+
+function showQuestion() {
+  answered = false;
+  var q = CONFIG.questions[currentQ];
+  var tot = CONFIG.questions.length;
+  document.getElementById("prog-fill").style.width = ((currentQ / tot) * 100) + "%";
+  document.getElementById("prog-lbl").textContent = (currentQ + 1) + " / " + tot;
+  document.getElementById("q-topic").textContent = q.topic;
+  document.getElementById("q-text").textContent = q.question;
+  var letters = ["A","B","C","D"];
+  var opts = document.getElementById("opts");
+  opts.innerHTML = "";
+  for (var i = 0; i < q.options.length; i++) {
+    var btn = document.createElement("button");
+    btn.className = "opt";
+    btn.setAttribute("data-idx", String(i));
+    var letter = (q.type === "tf") ? (i === 0 ? "T" : "F") : letters[i];
+    btn.innerHTML = "<span class=\"opt-letter\">" + letter + "</span>" + q.options[i];
+    opts.appendChild(btn);
+  }
+  opts.addEventListener("click", handleOption);
+  document.getElementById("feedback").className = "feedback";
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("btn-next").className = "btn-next";
 }
+
+function handleOption(e) {
+  if (answered) return;
+  var btn = e.target.closest(".opt");
+  if (!btn) return;
+  answered = true;
+  opts.removeEventListener("click", handleOption);
+  var idx = parseInt(btn.getAttribute("data-idx"), 10);
+  var q = CONFIG.questions[currentQ];
+  var ok = (idx === q.correct);
+  answers.push({ topic: q.topic, question: q.question, isCorrect: ok });
+  var allBtns = document.querySelectorAll(".opt");
+  for (var i = 0; i < allBtns.length; i++) {
+    allBtns[i].disabled = true;
+    if (i === q.correct) allBtns[i].classList.add("correct");
+    else if (i === idx && !ok) allBtns[i].classList.add("wrong");
+    else allBtns[i].classList.add("dimmed");
+  }
+  var fb = document.getElementById("feedback");
+  fb.className = "feedback " + (ok ? "show-correct" : "show-wrong");
+  fb.textContent = (ok ? "✓ " : "✗ ") + q.explanation;
+  var isLast = (currentQ === CONFIG.questions.length - 1);
+  var btnNext = document.getElementById("btn-next");
+  btnNext.className = "btn-next show";
+  btnNext.textContent = isLast ? "See results" : "Next →";
+}
+
+var opts = document.getElementById("opts");
 
 function showResults() {
-  document.getElementById("progress-fill").style.width = "100%";
-  document.getElementById("question-screen").style.display = "none";
-  document.getElementById("progress-wrap").style.display   = "none";
-
-  const score  = answers.filter(a => a.isCorrect).length;
-  const total  = answers.length;
-  const pct    = Math.round((score / total) * 100);
-
-  const ring = document.getElementById("score-ring");
+  document.getElementById("prog-fill").style.width = "100%";
+  document.getElementById("screen-q").style.display = "none";
+  document.getElementById("prog").style.display = "none";
+  var score = 0;
+  for (var i = 0; i < answers.length; i++) { if (answers[i].isCorrect) score++; }
+  var total = answers.length;
+  var pct = Math.round((score / total) * 100);
+  var ring = document.getElementById("score-ring");
   ring.textContent = score + "/" + total;
-  ring.className = "results-score-ring " + (pct === 100 ? "great" : pct >= 50 ? "ok" : "low");
-
-  const titles = { great: "Perfect score! 🎉", ok: "Good effort!", low: "Keep learning!" };
-  const subs   = {
-    great: "You nailed every question. Your score has been recorded.",
-    ok:    "You got some right – check the answers below and revisit the Confluence article.",
-    low:   "No worries – take another look at this week's content and try again."
-  };
-  const key = pct === 100 ? "great" : pct >= 50 ? "ok" : "low";
-  document.getElementById("results-title").textContent = titles[key];
-  document.getElementById("results-sub").textContent   = subs[key];
-
-  const bd = document.getElementById("results-breakdown");
-  bd.innerHTML = answers.map(a =>
-    `<div class="result-row">
-      <span class="result-icon">${a.isCorrect ? "✅" : "❌"}</span>
-      <span class="result-q"><strong>${a.topic}</strong>${a.question}</span>
-    </div>`
-  ).join("");
-
-  document.getElementById("results-screen").className = "results-screen visible";
-
-  // send to Google Sheets if configured
-  if (QUIZ_CONFIG.sheetsWebhook) {
-    sendToSheets(score, total, pct);
+  ring.className = "score-ring " + (pct === 100 ? "ring-great" : pct >= 50 ? "ring-ok" : "ring-low");
+  document.getElementById("res-title").textContent = pct === 100 ? "Perfect score!" : pct >= 50 ? "Good effort!" : "Keep learning!";
+  document.getElementById("res-sub").textContent = pct === 100
+    ? "You nailed every question. Your result has been recorded."
+    : pct >= 50
+    ? "You got some right - check the answers below and revisit the Confluence article."
+    : "No worries - take another look at this week's content and try again.";
+  var bd = document.getElementById("breakdown");
+  bd.innerHTML = "";
+  for (var j = 0; j < answers.length; j++) {
+    var row = document.createElement("div");
+    row.className = "res-row";
+    row.innerHTML = "<span>" + (answers[j].isCorrect ? "✅" : "❌") + "</span><span class=\"res-q\"><strong>" + answers[j].topic + "</strong>" + answers[j].question + "</span>";
+    bd.appendChild(row);
   }
-}
-
-function sendToSheets(score, total, pct) {
-  // GET + URL params avoids CORS with Google Apps Script
-  const params = new URLSearchParams({
-    name:      userName,
-    timestamp: new Date().toISOString(),
-    cw:        QUIZ_CONFIG.title,
-    score:     score + "/" + total,
-    pct:       pct + "%"
-  });
-  const img = new Image();
-  img.src = QUIZ_CONFIG.sheetsWebhook + "?" + params.toString();
-}
-
-function resetQuiz() {
-  currentQ = 0;
-  answers  = [];
-  answered = false;
-  document.getElementById("results-screen").className    = "results-screen";
-  document.getElementById("progress-wrap").style.display = "flex";
-  document.getElementById("question-screen").style.display = "block";
-  renderQuestion();
+  document.getElementById("screen-res").className = "results show";
+  if (CONFIG.webhook) {
+    var img = new Image();
+    img.src = CONFIG.webhook + "?name=" + encodeURIComponent(userName) + "&timestamp=" + encodeURIComponent(new Date().toISOString()) + "&cw=" + encodeURIComponent(CONFIG.title) + "&score=" + encodeURIComponent(score + "/" + total) + "&pct=" + encodeURIComponent(pct + "%");
+  }
 }
 </script>
 </body>
