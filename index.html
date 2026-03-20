@@ -420,7 +420,7 @@ const QUIZ_CONFIG = {
 
   // Google Sheets Web App URL for tracking (set to null to disable)
   // How to set up: Tools > Script editor > paste the Apps Script > Deploy as Web App
- sheetsWebhook: "https://script.google.com/macros/s/AKfycbzhwmG5lIuowzVJ1uf7GUrdGP7jtmYcaSIPuMIITTd3vT04gAMh1WATxjud-8g6tn0/exec", // e.g. "https://script.google.com/macros/s/YOUR_ID/exec"
+  sheetsWebhook: null, // e.g. "https://script.google.com/macros/s/YOUR_ID/exec"
 
   questions: [
     {
@@ -591,21 +591,16 @@ function showResults() {
 }
 
 function sendToSheets(score, total, pct) {
-  const payload = {
+  // GET + URL params avoids CORS with Google Apps Script
+  const params = new URLSearchParams({
     name:      userName,
     timestamp: new Date().toISOString(),
     cw:        QUIZ_CONFIG.title,
-    score,
-    total,
-    pct,
-    details: answers.map(a => ({ topic: a.topic, correct: a.isCorrect }))
-  };
-  fetch(QUIZ_CONFIG.sheetsWebhook, {
-    method: "POST",
-    mode:   "no-cors",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  }).catch(() => {}); // silent fail – don't block UX
+    score:     score + "/" + total,
+    pct:       pct + "%"
+  });
+  const img = new Image();
+  img.src = QUIZ_CONFIG.sheetsWebhook + "?" + params.toString();
 }
 
 function resetQuiz() {
