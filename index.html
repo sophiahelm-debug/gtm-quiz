@@ -1,534 +1,588 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>GTM Quiz – CW12</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GTM Quiz – CW15</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: #ffffff;
-    color: #1a1a1a;
-    min-height: 100vh;
-    padding: 2rem 1rem 3rem;
-  }
+    :root {
+      --gold:       #E6AF14;
+      --gold-muted: #FFF6DC;
+      --pink:       #C84182;
+      --pink-muted: #FFCBE4;
+      --blue:       #3C69BE;
+      --blue-muted: #D9E6FF;
+      --text:       #222222;
+      --text-light: #666666;
+      --bg:         #ffffff;
+      --radius:     10px;
+      --font:       'DM Sans', sans-serif;
+    }
 
-  .container {
-    max-width: 680px;
-    margin: 0 auto;
-  }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+    }
 
-  /* Header */
-  .header {
-    margin-bottom: 2rem;
-  }
-  .cw-label {
-    display: inline-block;
-    background: #FFF6DC;
-    color: #B88A0E;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 0.75rem;
-  }
-  .header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    color: #1a1a1a;
-    line-height: 1.3;
-    margin-bottom: 0.35rem;
-  }
-  .header p {
-    font-size: 14px;
-    color: #888;
-  }
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3rem;
+    }
 
-  /* Progress bar */
-  .progress-wrap {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 1.75rem;
-  }
-  .prog-seg {
-    height: 3px;
-    flex: 1;
-    border-radius: 2px;
-    background: #efefef;
-    transition: background 0.3s;
-  }
-  .prog-seg.done { background: #E6AF14; }
-  .prog-seg.active { background: #C84182; }
+    /* ── Header ── */
+    .header {
+      margin-bottom: 2rem;
+    }
+    .kw-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--gold-muted);
+      color: #8a6200;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 14px;
+      color: var(--text-light);
+    }
 
-  /* Question card */
-  .q-card {
-    background: #fff;
-    border: 1.5px solid #f0f0f0;
-    border-radius: 14px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  .topic-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 1rem;
-  }
-  .badge-sf   { background: #FFF6DC; color: #B88A0E; }
-  .badge-prod { background: #FFCBE4; color: #9E2F65; }
-  .badge-ai   { background: #D9E6FF; color: #2C4F8E; }
-  .badge-hey  { background: #FFF6DC; color: #B88A0E; }
+    /* ── Name input screen ── */
+    #name-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .name-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .name-input {
+      width: 100%;
+      padding: 12px 14px;
+      font-family: var(--font);
+      font-size: 15px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.2s;
+      color: var(--text);
+    }
+    .name-input:focus { border-color: var(--blue); }
+    .name-err {
+      font-size: 12px;
+      color: var(--pink);
+      display: none;
+      margin-top: -4px;
+    }
 
-  .q-number {
-    font-size: 11px;
-    color: #bbb;
-    font-weight: 500;
-    margin-bottom: 0.4rem;
-  }
-  .q-text {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1a1a1a;
-    line-height: 1.55;
-    margin-bottom: 1.25rem;
-  }
+    /* ── Progress ── */
+    .progress-wrap {
+      margin-bottom: 1.5rem;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+    .progress-track {
+      height: 4px;
+      background: #f0f0f0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
 
-  /* Options */
-  .options { display: flex; flex-direction: column; gap: 9px; }
-  .opt {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: #fafafa;
-    border: 1.5px solid #efefef;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 14px;
-    color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.18s, background 0.18s;
-    text-align: left;
-    width: 100%;
-    line-height: 1.45;
-  }
-  .opt:hover:not(:disabled) {
-    border-color: #E6AF14;
-    background: #FFFBEE;
-  }
-  .opt-letter {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #efefef;
-    color: #888;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-    transition: background 0.18s, color 0.18s;
-  }
-  .opt.correct {
-    background: #edfaf4;
-    border-color: #3DBD7D;
-    color: #1a6641;
-  }
-  .opt.correct .opt-letter {
-    background: #3DBD7D;
-    color: #fff;
-  }
-  .opt.wrong {
-    background: #fff0f0;
-    border-color: #E0504F;
-    color: #7a1f1f;
-  }
-  .opt.wrong .opt-letter {
-    background: #E0504F;
-    color: #fff;
-  }
-  .opt:disabled { cursor: default; }
+    /* ── Question card ── */
+    .q-card {
+      background: #fff;
+      border: 1px solid #eeeeee;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .q-topic {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+    .q-text {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.55;
+      color: var(--text);
+    }
 
-  /* Feedback */
-  .feedback {
-    margin-top: 1rem;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-    display: none;
-  }
-  .feedback.show { display: block; }
-  .feedback.ok   { background: #edfaf4; color: #1a6641; }
-  .feedback.nope { background: #fff0f0; color: #7a1f1f; }
+    /* ── Options ── */
+    .options { display: flex; flex-direction: column; gap: 8px; }
+    .opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      background: #fafafa;
+      border: 1.5px solid #e8e8e8;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      line-height: 1.5;
+    }
+    .opt-btn:hover:not(:disabled) {
+      background: var(--blue-muted);
+      border-color: var(--blue);
+    }
+    .opt-btn .letter {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #e8e8e8;
+      color: #555;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .opt-btn.correct {
+      background: #edfaf3;
+      border-color: #2daa6b;
+    }
+    .opt-btn.correct .letter {
+      background: #2daa6b;
+      color: #fff;
+    }
+    .opt-btn.wrong {
+      background: var(--pink-muted);
+      border-color: var(--pink);
+    }
+    .opt-btn.wrong .letter {
+      background: var(--pink);
+      color: #fff;
+    }
+    .opt-btn.reveal {
+      background: #edfaf3;
+      border-color: #2daa6b;
+      opacity: 0.6;
+    }
+    .opt-btn.reveal .letter {
+      background: #2daa6b;
+      color: #fff;
+    }
 
-  /* Nav */
-  .nav {
-    display: flex;
-    gap: 10px;
-    margin-top: 0.5rem;
-  }
-  .btn {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 10px 22px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .btn:active { transform: scale(0.98); }
-  .btn-primary {
-    background: #E6AF14;
-    color: #fff;
-  }
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-ghost {
-    background: transparent;
-    border: 1.5px solid #e0e0e0;
-    color: #555;
-  }
-  .btn-ghost:hover { background: #fafafa; }
-  .btn:disabled { opacity: 0.35; cursor: default; }
+    /* ── Feedback ── */
+    .feedback {
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      margin-top: 10px;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct { background: #edfaf3; color: #1a6e46; border: 1px solid #b2e8cc; }
+    .feedback.wrong   { background: var(--pink-muted); color: #8a1f4d; border: 1px solid #f0a3c4; }
 
-  /* Name screen */
-  .name-screen {
-    background: #fff;
-    border: 1.5px solid #f0f0f0;
-    border-radius: 14px;
-    padding: 2rem 1.5rem;
-  }
-  .name-screen h2 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 0.4rem;
-  }
-  .name-screen p {
-    font-size: 14px;
-    color: #888;
-    margin-bottom: 1.5rem;
-  }
-  .name-input {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 15px;
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 8px;
-    color: #1a1a1a;
-    background: #fafafa;
-    outline: none;
-    margin-bottom: 1rem;
-    transition: border-color 0.2s;
-  }
-  .name-input:focus { border-color: #E6AF14; background: #FFFBEE; }
-  .name-err { font-size: 12px; color: #C84182; margin-top: -0.5rem; margin-bottom: 1rem; display: none; }
-  .name-err.show { display: block; }
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 22px;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--gold);
+      color: #3d2a00;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #ddd;
+      color: var(--text);
+    }
+    .btn-outline:hover { background: #f5f5f5; }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
 
-  /* Result screen */
-  .result-screen {
-    background: #fff;
-    border: 1.5px solid #f0f0f0;
-    border-radius: 14px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-  }
-  .result-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin: 0 auto 1.25rem;
-  }
-  .result-icon.great { background: #FFF6DC; }
-  .result-icon.ok    { background: #FFCBE4; }
-  .result-icon.retry { background: #D9E6FF; }
-  .result-score {
-    font-size: 42px;
-    font-weight: 600;
-    color: #1a1a1a;
-    line-height: 1;
-    margin-bottom: 0.3rem;
-  }
-  .result-pct {
-    font-size: 14px;
-    color: #aaa;
-    margin-bottom: 0.75rem;
-  }
-  .result-msg {
-    font-size: 15px;
-    color: #444;
-    margin-bottom: 1.75rem;
-    line-height: 1.5;
-  }
-  .sending-msg {
-    font-size: 13px;
-    color: #aaa;
-    margin-top: 0.75rem;
-  }
-</style>
+    /* ── Score screen ── */
+    #score-screen { display: none; }
+    .score-hero {
+      text-align: center;
+      padding: 2rem 0 1.5rem;
+    }
+    .score-ring {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: var(--gold-muted);
+      border: 3px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .score-num { font-size: 28px; font-weight: 600; color: #3d2a00; }
+    .score-denom { font-size: 13px; color: #8a6200; }
+    .score-msg { font-size: 17px; font-weight: 500; margin-bottom: 6px; }
+    .score-sub { font-size: 13px; color: var(--text-light); }
+    .summary-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+    .summary-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: #fafafa;
+      border: 1px solid #eee;
+    }
+    .summary-item .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+    }
+    .dot-ok  { background: #2daa6b; }
+    .dot-err { background: var(--pink); }
+
+    /* ── Form submit ── */
+    .submit-section {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: var(--blue-muted);
+      border-radius: 12px;
+      border: 1px solid #c0d4f8;
+    }
+    .submit-section p { font-size: 13px; color: #1e3a6e; margin-bottom: 12px; }
+    .submit-status { font-size: 13px; margin-top: 10px; color: var(--text-light); display: none; }
+
+    /* ── Hidden ── */
+    .hidden { display: none !important; }
+  </style>
 </head>
 <body>
-<div class="container">
+<div class="page">
 
   <div class="header">
-    <div class="cw-label">CW 12 · 2026</div>
-    <h1>Sales & Marketing Bi-Weekly</h1>
-    <p>4 kurze Fragen – schnell gemacht, schnell gecheckt.</p>
+    <div class="kw-badge">CW 15 · 2026</div>
+    <h1>Sales &amp; Marketing Bi-Weekly</h1>
+    <p>5 kurze Fragen – schnell gemacht, schnell gecheckt.</p>
   </div>
 
-  <div class="progress-wrap" id="progress"></div>
-  <div id="main"></div>
+  <!-- Name screen -->
+  <div id="name-screen">
+    <div class="name-label">Wie heißt du?</div>
+    <input class="name-input" id="name-input" type="text" placeholder="Vor- und Nachname" autocomplete="name" />
+    <div class="name-err" id="name-err">Bitte gib deinen Namen ein.</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="startQuiz()">Quiz starten →</button>
+    </div>
+  </div>
+
+  <!-- Quiz screen -->
+  <div id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="prog-label">Frage 1 von 5</span>
+        <span id="prog-pct">0 %</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-topic" id="q-topic"></div>
+      <div class="q-text" id="q-text"></div>
+    </div>
+
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline hidden" id="next-btn" onclick="nextQuestion()">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- Score screen -->
+  <div id="score-screen">
+    <div class="score-hero">
+      <div class="score-ring">
+        <div class="score-num" id="s-num"></div>
+        <div class="score-denom" id="s-denom"></div>
+      </div>
+      <div class="score-msg" id="s-msg"></div>
+      <div class="score-sub" id="s-sub"></div>
+    </div>
+
+    <div class="summary-list" id="summary-list"></div>
+
+    <div class="submit-section">
+      <p>Dein Ergebnis wird automatisch übermittelt – nichts weiter nötig.</p>
+      <button class="btn btn-primary" id="submit-btn" onclick="submitScore()">Ergebnis absenden ↗</button>
+      <div class="submit-status" id="submit-status"></div>
+    </div>
+
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn btn-outline" onclick="restartQuiz()">Nochmal versuchen</button>
+    </div>
+  </div>
 
 </div>
 
 <script>
-const FORM_ID   = '1EecsS7WSTtGPEotliq2swxBCr-2fFwd0JnBX_qbDnHk';
-const E_NAME    = 'entry.1886770242';
-const E_QUIZ    = 'entry.1279331789';
-const E_SCORE   = 'entry.1794277357';
-const E_PERCENT = 'entry.2089584864';
+  const FORM_ID   = "1EecsS7WSTtGPEotliq2swxBCr-2fFwd0JnBX_qbDnHk";
+  const E_NAME    = "entry.1886770242";
+  const E_QUIZ    = "entry.1279331789";
+  const E_SCORE   = "entry.1794277357";
+  const E_PERCENT = "entry.2089584864";
+  const QUIZ_NAME = "CW15";
 
-const questions = [
-  {
-    topic: 'Salesforce Clean Up', badge: 'badge-sf',
-    q: 'Worum geht es beim Salesforce Clean Up grundsätzlich?',
-    options: [
-      'Ein neues CRM-Tool wird eingeführt',
-      'Daten, Definitionen und Prozesse in Salesforce werden vereinheitlicht',
-      'Alle alten Accounts werden gelöscht',
-      'Salesforce wird durch Slack ersetzt'
-    ],
-    correct: 1,
-    feedback: 'Genau! Ziel ist die Vereinheitlichung von Daten, Definitionen und Prozessen in Salesforce.'
-  },
-  {
-    topic: 'Product Update', badge: 'badge-prod',
-    q: 'Was können Kund:innen im Recruiter Portal künftig besser nachvollziehen?',
-    options: [
-      'Wie viele Bewerbungen ihre Stellenanzeigen generiert haben',
-      'Welche Screening Questions Kandidat:innen herausfiltern und wo sie abbrechen',
-      'Die Gehaltsbenchmarks ihrer offenen Stellen',
-      'Wie lange Kandidat:innen im Prozess waren'
-    ],
-    correct: 1,
-    feedback: 'Richtig! Kund:innen sehen künftig, welche SQs wen ausfiltern und wo Bewerbende abbrechen.'
-  },
-  {
-    topic: 'AI in GTM', badge: 'badge-ai',
-    q: 'Was ist die Hauptaufgabe von Ferdi Bärenfänger ab 1. April?',
-    options: [
-      'Er übernimmt die Leitung des SDR-Teams',
-      'Er ist zuständig für den AI-Rollout im Vertrieb als GTM AI Adoption Champion',
-      'Er entwickelt neue Produktfeatures zusammen mit R&D',
-      'Er ersetzt Max Riegel als GTM Lead'
-    ],
-    correct: 1,
-    feedback: 'Korrekt! Ferdi übernimmt die Rolle des GTM AI Adoption Champions und treibt den AI-Rollout im Vertrieb voran.'
-  },
-  {
-    topic: 'HeyDay Berlin', badge: 'badge-hey',
-    q: 'Wann und wo findet der HeyDay Berlin 2026 statt?',
-    options: [
-      '15. April, HeyJobs Hamburg',
-      '20. Mai, HeyJobs Office Berlin',
-      '10. Juni, Messe Berlin',
-      '20. Mai, Axel Springer Campus Berlin'
-    ],
-    correct: 1,
-    feedback: 'Richtig! Der HeyDay Berlin findet am 20. Mai 2026 im HeyJobs Office Berlin statt.'
-  }
-];
+  const questions = [
+    {
+      topic: "Jobbörse Update",
+      q: "Welcher Effekt hat die neue Stellen-Deduplizierung auf der Jobbörse nach 2 Wochen erzielt?",
+      type: "mc",
+      options: [
+        "Doppelt so viele Bewerbungen wie vorher",
+        "Von 17.032 auf über 91.000 Bewerbungen pro Woche",
+        "Rückgang der Views durch mehr Konkurrenz",
+        "Keine messbaren Effekte bisher"
+      ],
+      correct: 1,
+      explanation: "Die Umstellung auf Stellen-Deduplizierung steigerte die Bewerbungen von 17.032 auf 91.179 pro Woche – besonders stark in Logistik, Filialistik und Pflege-Ausbildung."
+    },
+    {
+      topic: "StepStone AllJobs Positionierung",
+      q: "Was ist das zentrale Argument gegen StepStone AllJobs im Kundengespräch?",
+      type: "mc",
+      options: [
+        "AllJobs ist deutlich teurer im Gesamtpreis",
+        "AllJobs hat keinen Performance-Algorithmus",
+        "Der Durchschnittspreis sinkt, aber wichtige Rollen werden teurer und underperformen",
+        "AllJobs bietet keine Festpreise an"
+      ],
+      correct: 2,
+      explanation: "AllJobs behandelt alle Jobs gleich – ineffiziente Budgetverteilung. Durchschnittspreis sinkt, kritische Rollen werden teurer und schlechter besetzt. Festpreis ist keine echte Sicherheit, Performance ist es."
+    },
+    {
+      topic: "Case Study Stadtverwaltung Konstanz",
+      q: "Warum eignet sich HeyJobs besonders gut für den öffentlichen Sektor – wie das Beispiel Stadtverwaltung Konstanz zeigt?",
+      type: "mc",
+      options: [
+        "HeyJobs bietet spezielle Behörden-Rabatte",
+        "REACH erreicht passive Kandidat:innen auch bei eingeschränkter Social-Media-Nutzung",
+        "Die Stadt Konstanz nutzt ausschließlich Print-Werbung",
+        "HeyJobs ist die einzige Plattform mit DSGVO-Konformität"
+      ],
+      correct: 1,
+      explanation: "Öffentliche Institutionen haben oft restriktive Social-Media-Vorgaben. REACH gleicht das aus und erschließt trotzdem eine große Zielgruppe für passive Talente."
+    },
+    {
+      topic: "Produkt-Update REACH / HIRE",
+      q: "Was zeigt das neue Feature im REACH-/HIRE-Produkt bezüglich abgelehnter Talente?",
+      type: "mc",
+      options: [
+        "Abgelehnte Talente werden automatisch erneut angeschrieben",
+        "Kandidat:innen können Ablehnungsgründe anfechten",
+        "Recruiter sehen transparent, warum Kandidat:innen durch Auswahlfragen herausgefiltert wurden",
+        "Das Feature ist noch in der Beta-Phase und nicht sichtbar"
+      ],
+      correct: 2,
+      explanation: "Das neue Feature bietet volle Transparenz: Alle automatisch abgelehnten Talente durch Auswahlfragen werden klar dargestellt. Außerdem steigern Algorithmusoptimierungen Bewerbungen um bis zu +16 % gegenüber Januar-Peak."
+    },
+    {
+      topic: "Bookit Migration",
+      q: "Bis wann muss die Migration von YCBM auf Bookit abgeschlossen sein, und was passiert danach?",
+      type: "mc",
+      options: [
+        "Bis 30. April; YCBM wird dann kostenpflichtig",
+        "Bis 10. April; YCBM wird am 13. April abgeschaltet",
+        "Bis Ende Q2; YCBM läuft parallel weiter",
+        "Keine Deadline; Migration ist freiwillig"
+      ],
+      correct: 1,
+      explanation: "Die Migration muss bis zum 10. April abgeschlossen sein. Am 13. April wird YCBM endgültig abgeschaltet. Bookit ist vollständig in LeanData integriert."
+    }
+  ];
 
-let userName = '';
-let current  = 0;
-let answers  = new Array(questions.length).fill(null);
-let answered = new Array(questions.length).fill(false);
+  const LETTERS = ["A", "B", "C", "D"];
+  let current = 0, score = 0, answers = [], userName = "";
 
-/* ── Progress ── */
-function renderProgress() {
-  const p = document.getElementById('progress');
-  p.innerHTML = '';
-  questions.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'prog-seg' + (i < current ? ' done' : i === current ? ' active' : '');
-    p.appendChild(d);
-  });
-}
-
-/* ── Name screen ── */
-function renderName() {
-  document.getElementById('progress').style.display = 'none';
-  document.getElementById('main').innerHTML = `
-    <div class="name-screen">
-      <h2>Kurz vorstellen</h2>
-      <p>Damit dein Ergebnis zugeordnet werden kann – dauert 2 Sekunden.</p>
-      <input class="name-input" id="nameInput" type="text" placeholder="Dein Vor- und Nachname" autocomplete="off" />
-      <div class="name-err" id="nameErr">Bitte gib deinen Namen ein.</div>
-      <button class="btn btn-primary" onclick="startQuiz()">Quiz starten →</button>
-    </div>
-  `;
-  document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') startQuiz(); });
-}
-
-function startQuiz() {
-  const val = document.getElementById('nameInput').value.trim();
-  if (!val) { document.getElementById('nameErr').classList.add('show'); return; }
-  userName = val;
-  document.getElementById('progress').style.display = 'flex';
-  renderProgress();
-  renderQuestion();
-}
-
-/* ── Question ── */
-function renderQuestion() {
-  if (current >= questions.length) { renderResult(); return; }
-  const q = questions[current];
-  document.getElementById('main').innerHTML = `
-    <div class="q-card">
-      <div class="topic-badge ${q.badge}">${q.topic}</div>
-      <div class="q-number">Frage ${current + 1} von ${questions.length}</div>
-      <div class="q-text">${q.q}</div>
-      <div class="options">
-        ${q.options.map((o, i) => `
-          <button class="opt" onclick="pick(${i})" id="opt-${i}">
-            <span class="opt-letter">${String.fromCharCode(65 + i)}</span>
-            <span>${o}</span>
-          </button>`).join('')}
-      </div>
-      <div class="feedback" id="feedback"></div>
-    </div>
-    <div class="nav">
-      <button class="btn btn-ghost" onclick="go(-1)" ${current === 0 ? 'disabled' : ''}>← Zurück</button>
-      <button class="btn btn-primary" id="next-btn" onclick="go(1)" style="display:${answered[current] ? 'inline-flex' : 'none'}">
-        ${current === questions.length - 1 ? 'Auswertung →' : 'Weiter →'}
-      </button>
-    </div>
-  `;
-  if (answered[current]) restoreState();
-  renderProgress();
-}
-
-function pick(idx) {
-  if (answered[current]) return;
-  answered[current] = true;
-  answers[current]  = idx;
-  const q = questions[current];
-  q.options.forEach((_, i) => {
-    const btn = document.getElementById('opt-' + i);
-    btn.disabled = true;
-    if (i === q.correct) btn.classList.add('correct');
-    else if (i === idx)  btn.classList.add('wrong');
-  });
-  const fb = document.getElementById('feedback');
-  fb.className = 'feedback show ' + (idx === q.correct ? 'ok' : 'nope');
-  fb.textContent = (idx === q.correct ? '✓ ' : '✗ Leider falsch. ') + q.feedback;
-  document.getElementById('next-btn').style.display = 'inline-flex';
-}
-
-function restoreState() {
-  const q   = questions[current];
-  const idx = answers[current];
-  q.options.forEach((_, i) => {
-    const btn = document.getElementById('opt-' + i);
-    btn.disabled = true;
-    if (i === q.correct)              btn.classList.add('correct');
-    else if (i === idx && i !== q.correct) btn.classList.add('wrong');
-  });
-  const fb = document.getElementById('feedback');
-  fb.className = 'feedback show ' + (idx === q.correct ? 'ok' : 'nope');
-  fb.textContent = (idx === q.correct ? '✓ ' : '✗ Leider falsch. ') + q.feedback;
-}
-
-function go(dir) {
-  current = Math.max(0, current + dir);
-  renderQuestion();
-}
-
-/* ── Result + Google Form submit ── */
-function renderResult() {
-  const score = answers.filter((a, i) => a === questions[i].correct).length;
-  const pct   = Math.round(score / questions.length * 100);
-  let icon, iconClass, msg;
-  if (pct === 100) {
-    icon = '🏆'; iconClass = 'great';
-    msg  = 'Perfekt! Du hast den Artikel aufmerksam gelesen.';
-  } else if (pct >= 50) {
-    icon = '👍'; iconClass = 'ok';
-    msg  = 'Gut gemacht! Schau dir die Details kurz nochmal an.';
-  } else {
-    icon = '📖'; iconClass = 'retry';
-    msg  = 'Schnell den Artikel nochmal überfliegen – dauert nur 2 Minuten!';
+  function startQuiz() {
+    const input = document.getElementById("name-input");
+    const err   = document.getElementById("name-err");
+    if (!input.value.trim()) { err.style.display = "block"; input.focus(); return; }
+    err.style.display = "none";
+    userName = input.value.trim();
+    document.getElementById("name-screen").classList.add("hidden");
+    document.getElementById("quiz-screen").classList.remove("hidden");
+    renderQuestion();
   }
 
-  document.getElementById('progress').innerHTML = '';
-  document.getElementById('main').innerHTML = `
-    <div class="result-screen">
-      <div class="result-icon ${iconClass}">${icon}</div>
-      <div class="result-score">${score} / ${questions.length}</div>
-      <div class="result-pct">${pct}% richtig</div>
-      <div class="result-msg">${msg}</div>
-      <button class="btn btn-primary" onclick="restart()">Nochmal versuchen</button>
-      <div class="sending-msg" id="sending">Ergebnis wird gespeichert…</div>
-    </div>
-  `;
+  function renderQuestion() {
+    const q = questions[current];
+    const total = questions.length;
+    const pct   = Math.round((current / total) * 100);
 
-  submitToForm(score, pct);
-}
+    document.getElementById("prog-label").textContent = `Frage ${current + 1} von ${total}`;
+    document.getElementById("prog-pct").textContent   = pct + " %";
+    document.getElementById("prog-fill").style.width  = pct + "%";
+    document.getElementById("q-topic").textContent    = q.topic;
+    document.getElementById("q-text").textContent     = q.q;
 
-function submitToForm(score, pct) {
-  const quizLabel = 'CW12';
-  const url = `https://docs.google.com/forms/d/${FORM_ID}/formResponse?` +
-    `${E_NAME}=${encodeURIComponent(userName)}&` +
-    `${E_QUIZ}=${encodeURIComponent(quizLabel)}&` +
-    `${E_SCORE}=${encodeURIComponent(score + ' / ' + questions.length)}&` +
-    `${E_PERCENT}=${encodeURIComponent(pct + '%')}&` +
-    `submit=Submit`;
+    const opts = document.getElementById("options");
+    opts.innerHTML = "";
+    q.options.forEach((text, i) => {
+      const btn = document.createElement("button");
+      btn.className = "opt-btn";
+      btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${text}</span>`;
+      btn.onclick = () => selectAnswer(i);
+      opts.appendChild(btn);
+    });
 
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.name = 'hidden_submit';
-  document.body.appendChild(iframe);
+    const fb = document.getElementById("feedback");
+    fb.className = "feedback";
+    fb.textContent = "";
+    document.getElementById("next-btn").classList.add("hidden");
+  }
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = url;
-  form.target = 'hidden_submit';
-  document.body.appendChild(form);
-  form.submit();
+  function selectAnswer(idx) {
+    const q    = questions[current];
+    const btns = document.querySelectorAll(".opt-btn");
+    btns.forEach(b => b.disabled = true);
 
-  setTimeout(() => {
-    const msg = document.getElementById('sending');
-    if (msg) msg.textContent = 'Ergebnis gespeichert ✓';
-  }, 2000);
-}
+    const correct = idx === q.correct;
+    if (correct) score++;
+    answers.push({ question: q.q, topic: q.topic, selected: idx, correct: q.correct, ok: correct });
 
-function restart() {
-  current  = 0;
-  answers  = new Array(questions.length).fill(null);
-  answered = new Array(questions.length).fill(false);
-  renderProgress();
-  renderQuestion();
-}
+    btns.forEach((b, i) => {
+      if (i === q.correct) b.classList.add(correct ? "correct" : "reveal");
+      else if (i === idx)  b.classList.add("wrong");
+    });
 
-/* ── Init ── */
-renderName();
+    const fb = document.getElementById("feedback");
+    fb.className = "feedback show " + (correct ? "correct" : "wrong");
+    fb.textContent = (correct ? "✓ Richtig! " : "✗ Leider falsch. ") + q.explanation;
+
+    document.getElementById("next-btn").classList.remove("hidden");
+    document.getElementById("next-btn").textContent =
+      current < questions.length - 1 ? "Weiter →" : "Ergebnis sehen →";
+  }
+
+  function nextQuestion() {
+    current++;
+    if (current >= questions.length) showScore();
+    else renderQuestion();
+  }
+
+  function showScore() {
+    document.getElementById("quiz-screen").classList.add("hidden");
+    const ss = document.getElementById("score-screen");
+    ss.style.display = "block";
+
+    const pct = Math.round((score / questions.length) * 100);
+    document.getElementById("s-num").textContent   = score;
+    document.getElementById("s-denom").textContent = "/ " + questions.length;
+
+    let msg, sub;
+    if (pct === 100) { msg = "Perfekt! 🎉"; sub = "Alle Updates drauf – beeindruckend."; }
+    else if (pct >= 80) { msg = "Sehr gut!"; sub = "Du kennst die wichtigsten Updates."; }
+    else if (pct >= 60) { msg = "Solide."; sub = "Noch ein bisschen üben – du schaffst das."; }
+    else { msg = "Nochmal durchlesen!"; sub = "Die Bi-Weekly lohnt sich – versprochen."; }
+
+    document.getElementById("s-msg").textContent = msg;
+    document.getElementById("s-sub").textContent = sub;
+
+    const list = document.getElementById("summary-list");
+    list.innerHTML = answers.map(a =>
+      `<div class="summary-item">
+        <div class="dot ${a.ok ? "dot-ok" : "dot-err"}"></div>
+        <div><strong>${a.topic}</strong><br>${a.question}</div>
+      </div>`
+    ).join("");
+  }
+
+  function submitScore() {
+    const pct = Math.round((score / questions.length) * 100);
+    const url = `https://docs.google.com/forms/d/${FORM_ID}/formResponse`
+      + `?${E_NAME}=${encodeURIComponent(userName)}`
+      + `&${E_QUIZ}=${encodeURIComponent(QUIZ_NAME)}`
+      + `&${E_SCORE}=${score}`
+      + `&${E_PERCENT}=${pct}`
+      + `&submit=Submit`;
+
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.src = url;
+    document.body.appendChild(iframe);
+
+    const btn    = document.getElementById("submit-btn");
+    const status = document.getElementById("submit-status");
+    btn.disabled = true;
+    btn.textContent = "Gesendet ✓";
+    btn.style.opacity = "0.6";
+    status.style.display = "block";
+    status.textContent = "Ergebnis wurde übermittelt. Danke, " + userName + "!";
+  }
+
+  function restartQuiz() {
+    current = 0; score = 0; answers = [];
+    document.getElementById("score-screen").style.display = "none";
+    document.getElementById("name-screen").classList.remove("hidden");
+    document.getElementById("name-input").value = "";
+    document.getElementById("submit-btn").disabled = false;
+    document.getElementById("submit-btn").textContent = "Ergebnis absenden ↗";
+    document.getElementById("submit-btn").style.opacity = "1";
+    document.getElementById("submit-status").style.display = "none";
+  }
+
+  document.getElementById("name-input").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") startQuiz();
+  });
 </script>
 </body>
 </html>
