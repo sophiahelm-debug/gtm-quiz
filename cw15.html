@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title id="page-title">GTM Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #E6AF14;
+    --gold-muted: #FFF6DC;
+    --gold-dark: #b88a0e;
+    --pink: #C84182;
+    --pink-muted: #FFCBE4;
+    --blue: #3C69BE;
+    --blue-muted: #D9E6FF;
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --bg: #ffffff;
+    --surface: #f9f9f9;
+    --border: #e8e8e8;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--gold-muted);
+    color: var(--gold-dark);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 99px;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .header p {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .progress-wrap { margin-bottom: 1.75rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .progress-bar {
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 99px;
+    transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .name-screen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 1.75rem;
+    text-align: center;
+  }
+  .name-screen .icon {
+    width: 52px;
+    height: 52px;
+    background: var(--gold-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 24px;
+  }
+  .name-screen h2 { font-size: 20px; font-weight: 600; margin-bottom: 0.4rem; }
+  .name-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .name-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 1rem;
+  }
+  .name-input:focus { border-color: var(--gold); }
+
+  .q-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .q-topic {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--pink);
+    background: var(--pink-muted);
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: 0.85rem;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 9px; }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.5;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: var(--gold-muted);
+    transform: translateX(3px);
+  }
+  .opt-btn .letter {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .opt-btn:hover:not(:disabled) .letter {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+  }
+  .opt-btn.correct {
+    border-color: #3a9c5e;
+    background: #edf8f2;
+    color: #1a5c33;
+  }
+  .opt-btn.correct .letter {
+    background: #3a9c5e;
+    border-color: #3a9c5e;
+    color: white;
+  }
+  .opt-btn.wrong {
+    border-color: var(--pink);
+    background: var(--pink-muted);
+    color: #7a1a40;
+  }
+  .opt-btn.wrong .letter {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: white;
+  }
+  .opt-btn.reveal {
+    border-color: #3a9c5e;
+    background: #edf8f2;
+    color: #1a5c33;
+    opacity: 0.65;
+  }
+  .opt-btn.reveal .letter {
+    background: #3a9c5e;
+    border-color: #3a9c5e;
+    color: white;
+  }
+  .opt-btn:disabled { cursor: default; transform: none; }
+
+  .feedback {
+    margin-top: 1rem;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .feedback.ok { background: #edf8f2; color: #1a5c33; border: 1px solid #b0dfc0; }
+  .feedback.nok { background: var(--pink-muted); color: #7a1a40; border: 1px solid #f0a0c0; }
+  .feedback-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--gold);
+    color: #3a2800;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--gold-dark); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .score-screen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+  }
+  .score-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--gold-muted);
+    border: 3px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .score-num { font-size: 30px; font-weight: 700; color: var(--gold-dark); line-height: 1; }
+  .score-denom { font-size: 13px; color: var(--gold-dark); font-weight: 500; }
+  .score-screen h2 { font-size: 20px; font-weight: 600; margin-bottom: 0.4rem; }
+  .score-screen .msg { font-size: 14px; color: var(--text-muted); margin-bottom: 1.75rem; line-height: 1.6; }
+  .sent-note { font-size: 13px; color: var(--text-muted); margin-top: 0.75rem; }
+  .sent-note span { color: #3a9c5e; font-weight: 600; }
+  .btn-outline {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--gold);
+    background: transparent;
+    color: var(--gold-dark);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    transition: background 0.15s;
+  }
+  .btn-outline:hover { background: var(--gold-muted); }
+
+  .hidden { display: none; }
+  .action-row { margin-top: 1rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-badge" id="header-badge"></div>
+    <h1>GTM Weekly Quiz</h1>
+    <p>Sales &amp; Marketing Bi-Weekly. 5 kurze Fragen, schnell gemacht.</p>
+  </div>
+
+  <div id="name-screen" class="name-screen">
+    <div class="icon">👋</div>
+    <h2>Wie heißt du?</h2>
+    <p>Vor- und Nachname eingeben, dann geht's los.</p>
+    <input type="text" id="name-input" class="name-input" placeholder="Vorname Nachname" autocomplete="name" />
+    <button class="btn-primary" onclick="startQuiz()">Quiz starten →</button>
+  </div>
+
+  <div id="quiz-screen" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="q-counter">Frage 1 von 5</span>
+        <span id="q-score">0 richtig</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    </div>
+    <div id="q-body"></div>
+  </div>
+
+  <div id="score-screen" class="score-screen hidden">
+    <div class="score-circle">
+      <div class="score-num" id="final-score">0</div>
+      <div class="score-denom">von 5</div>
+    </div>
+    <h2 id="final-title">Gut gemacht!</h2>
+    <div class="msg" id="final-msg"></div>
+    <button class="btn-primary" id="submit-btn" onclick="submitScore()">Ergebnis abschicken</button>
+    <div class="sent-note hidden" id="sent-note"><span>✓ Abgeschickt!</span> Danke fürs Mitmachen.</div>
+    <br/>
+    <button class="btn-outline" onclick="restartQuiz()">Nochmal versuchen</button>
+  </div>
+
+</div>
+
+<script>
+// =====================================================
+// PRO WOCHE NUR DIESE ZWEI BEREICHE ÄNDERN:
+// 1) CW-Nummer und Jahr
+// 2) Fragen-Array unten
+// =====================================================
+const CW = 15;
+const YEAR = 2026;
+
+const questions = [
+  {
+    topic: "Jobbörse Update",
+    q: "Welcher Effekt hat die neue Stellen-Deduplizierung auf der Jobbörse nach 2 Wochen erzielt?",
+    opts: [
+      "Doppelt so viele Bewerbungen wie vorher",
+      "Von 17.032 auf über 91.000 Bewerbungen pro Woche",
+      "Rückgang der Views durch mehr Konkurrenz",
+      "Keine messbaren Effekte bisher"
+    ],
+    correct: 1,
+    explain: "Die Umstellung auf Stellen-Deduplizierung steigerte die Bewerbungen von 17.032 auf 91.179 pro Woche. Besonders stark in Logistik, Filialistik und Pflege-Ausbildung."
+  },
+  {
+    topic: "StepStone AllJobs Positionierung",
+    q: "Was ist das zentrale Argument gegen StepStone AllJobs im Kundengespräch?",
+    opts: [
+      "AllJobs ist deutlich teurer im Gesamtpreis",
+      "AllJobs hat keinen Performance-Algorithmus",
+      "Der Durchschnittspreis sinkt, aber wichtige Rollen werden teurer und underperformen",
+      "AllJobs bietet keine Festpreise an"
+    ],
+    correct: 2,
+    explain: "AllJobs behandelt alle Jobs gleich: ineffiziente Budgetverteilung. Durchschnittspreis sinkt, kritische Rollen werden teurer und schlechter besetzt. Festpreis ist keine echte Sicherheit, Performance ist es."
+  },
+  {
+    topic: "Case Study Stadtverwaltung Konstanz",
+    q: "Warum eignet sich HeyJobs besonders gut für den öffentlichen Sektor, wie das Beispiel Stadtverwaltung Konstanz zeigt?",
+    opts: [
+      "HeyJobs bietet spezielle Behörden-Rabatte",
+      "REACH erreicht passive Kandidat:innen auch bei eingeschränkter Social-Media-Nutzung",
+      "Die Stadt Konstanz nutzt ausschließlich Print-Werbung",
+      "HeyJobs ist die einzige Plattform mit DSGVO-Konformität"
+    ],
+    correct: 1,
+    explain: "Öffentliche Institutionen haben oft restriktive Social-Media-Vorgaben. REACH gleicht das aus und erschließt trotzdem eine große Zielgruppe für passive Talente."
+  },
+  {
+    topic: "Produkt-Update REACH / HIRE",
+    q: "Was zeigt das neue Feature im REACH-/HIRE-Produkt bezüglich abgelehnter Talente?",
+    opts: [
+      "Abgelehnte Talente werden automatisch erneut angeschrieben",
+      "Kandidat:innen können Ablehnungsgründe anfechten",
+      "Recruiter sehen transparent, warum Kandidat:innen durch Auswahlfragen herausgefiltert wurden",
+      "Das Feature ist noch in der Beta-Phase und nicht sichtbar"
+    ],
+    correct: 2,
+    explain: "Das neue Feature bietet volle Transparenz: Alle automatisch abgelehnten Talente durch Auswahlfragen werden klar dargestellt. Außerdem steigern Algorithmusoptimierungen Bewerbungen um bis zu +16 % gegenüber Januar-Peak."
+  },
+  {
+    topic: "Bookit Migration",
+    q: "Bis wann muss die Migration von YCBM auf Bookit abgeschlossen sein, und was passiert danach?",
+    opts: [
+      "Bis 30. April; YCBM wird dann kostenpflichtig",
+      "Bis 10. April; YCBM wird am 13. April abgeschaltet",
+      "Bis Ende Q2; YCBM läuft parallel weiter",
+      "Keine Deadline; Migration ist freiwillig"
+    ],
+    correct: 1,
+    explain: "Die Migration muss bis zum 10. April abgeschlossen sein. Am 13. April wird YCBM endgültig abgeschaltet. Bookit ist vollständig in LeanData integriert."
+  }
+];
+
+// =====================================================
+// AB HIER NICHTS MEHR ÄNDERN
+// =====================================================
+const QUIZ_NAME = `GTM Quiz CW${CW}`;
+const FORM_ID = "1EecsS7WSTtGPEotliq2swxBCr-2fFwd0JnBX_qbDnHk";
+const ENTRIES = {
+  name:    "entry.1886770242",
+  quiz:    "entry.1279331789",
+  score:   "entry.1794277357",
+  percent: "entry.2089584864"
+};
+
+document.getElementById("page-title").textContent = `GTM Quiz, CW ${CW}`;
+document.getElementById("header-badge").textContent = `CW ${CW} · ${YEAR}`;
+
+let userName = "";
+let current = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+  const val = document.getElementById("name-input").value.trim();
+  if (!val) { document.getElementById("name-input").focus(); return; }
+  userName = val;
+  document.getElementById("name-screen").classList.add("hidden");
+  document.getElementById("quiz-screen").classList.remove("hidden");
+  current = 0; score = 0;
+  renderQ();
+}
+
+function renderQ() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+  document.getElementById("q-counter").textContent = "Frage " + (current + 1) + " von " + total;
+  document.getElementById("q-score").textContent = score + " richtig";
+  document.getElementById("prog").style.width = (current / total * 100) + "%";
+
+  const letters = ["A", "B", "C", "D"];
+  const optsHTML = q.opts.map((o, i) =>
+    `<button class="opt-btn" id="opt${i}" onclick="pick(${i})">
+      <span class="letter">${letters[i]}</span>
+      <span>${o}</span>
+    </button>`
+  ).join("");
+
+  document.getElementById("q-body").innerHTML = `
+    <div class="q-card">
+      <div class="q-topic">${q.topic}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optsHTML}</div>
+      <div id="feedback"></div>
+    </div>
+    <div class="action-row hidden" id="next-wrap">
+      <button class="btn-primary" onclick="nextQ()">${current < total - 1 ? "Nächste Frage →" : "Ergebnis ansehen →"}</button>
+    </div>
+  `;
+}
+
+function pick(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const isCorrect = i === q.correct;
+  if (isCorrect) score++;
+
+  q.opts.forEach((_, idx) => {
+    const btn = document.getElementById("opt" + idx);
+    btn.disabled = true;
+    if (idx === q.correct) {
+      btn.classList.add(isCorrect ? "correct" : "reveal");
+    } else if (idx === i) {
+      btn.classList.add("wrong");
+    }
+  });
+
+  const fb = document.getElementById("feedback");
+  if (isCorrect) {
+    fb.innerHTML = `<div class="feedback ok"><span class="feedback-icon">✓</span><span><strong>Richtig!</strong> ${q.explain}</span></div>`;
+  } else {
+    fb.innerHTML = `<div class="feedback nok"><span class="feedback-icon">✗</span><span><strong>Leider falsch.</strong> ${q.explain}</span></div>`;
+  }
+
+  document.getElementById("q-score").textContent = score + " richtig";
+  document.getElementById("next-wrap").classList.remove("hidden");
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) {
+    showScore();
+  } else {
+    renderQ();
+  }
+}
+
+function showScore() {
+  document.getElementById("quiz-screen").classList.add("hidden");
+  const pct = Math.round(score / questions.length * 100);
+  document.getElementById("final-score").textContent = score;
+  document.getElementById("prog").style.width = "100%";
+
+  let title = "Gut gemacht!";
+  let msg = "Du hast " + score + " von " + questions.length + " Fragen richtig beantwortet (" + pct + "%). Schau dir die Themen nochmal an und bleib auf dem Laufenden!";
+  if (score === questions.length) {
+    title = "Perfekt! 🏆";
+    msg = "Alle 5 Fragen richtig. Du hast die Themen aus CW " + CW + " vollständig drauf. Top vorbereitet!";
+  } else if (score >= 4) {
+    title = "Fast perfekt! ⭐";
+    msg = score + " von 5 richtig (" + pct + "%). Sehr solide. Du bist gut für Kundengespräche gewappnet.";
+  } else if (score >= 3) {
+    title = "Gut gemacht!";
+    msg = score + " von 5 richtig (" + pct + "%). Die Grundlagen sitzen. Ein nochmaliges Durchlesen lohnt sich.";
+  } else {
+    title = "Noch Luft nach oben";
+    msg = score + " von 5 richtig (" + pct + "%). Schau dir die CW " + CW + " Updates nochmal an. Die Themen sind wichtig für den Alltag.";
+  }
+
+  document.getElementById("final-title").textContent = title;
+  document.getElementById("final-msg").textContent = msg;
+  document.getElementById("score-screen").classList.remove("hidden");
+}
+
+function submitScore() {
+  const pct = Math.round(score / questions.length * 100) + "%";
+  const url = "https://docs.google.com/forms/d/" + FORM_ID + "/formResponse?" +
+    ENTRIES.name + "=" + encodeURIComponent(userName) + "&" +
+    ENTRIES.quiz + "=" + encodeURIComponent(QUIZ_NAME) + "&" +
+    ENTRIES.score + "=" + encodeURIComponent(score + "/" + questions.length) + "&" +
+    ENTRIES.percent + "=" + encodeURIComponent(pct) +
+    "&submit=Submit";
+
+  const img = new Image();
+  img.src = url;
+
+  document.getElementById("submit-btn").disabled = true;
+  document.getElementById("sent-note").classList.remove("hidden");
+}
+
+function restartQuiz() {
+  current = 0; score = 0; answered = false;
+  document.getElementById("score-screen").classList.add("hidden");
+  document.getElementById("sent-note").classList.add("hidden");
+  document.getElementById("submit-btn").disabled = false;
+  document.getElementById("quiz-screen").classList.remove("hidden");
+  renderQ();
+}
+
+document.getElementById("name-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") startQuiz();
+});
+</script>
+</body>
+</html>
