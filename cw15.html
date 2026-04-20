@@ -38,6 +38,7 @@
     margin: 0 auto;
   }
 
+  /* Header */
   .header {
     text-align: center;
     margin-bottom: 2rem;
@@ -66,7 +67,10 @@
     color: var(--text-muted);
   }
 
-  .progress-wrap { margin-bottom: 1.75rem; }
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 1.75rem;
+  }
   .progress-meta {
     display: flex;
     justify-content: space-between;
@@ -88,6 +92,7 @@
     transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
   }
 
+  /* Name screen */
   .name-screen {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -106,8 +111,16 @@
     margin: 0 auto 1rem;
     font-size: 24px;
   }
-  .name-screen h2 { font-size: 20px; font-weight: 600; margin-bottom: 0.4rem; }
-  .name-screen p { font-size: 14px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .name-screen h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .name-screen p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
   .name-input {
     width: 100%;
     padding: 12px 16px;
@@ -123,6 +136,7 @@
   }
   .name-input:focus { border-color: var(--gold); }
 
+  /* Question card */
   .q-card {
     background: white;
     border: 1px solid var(--border);
@@ -150,6 +164,7 @@
     margin-bottom: 1.25rem;
   }
 
+  /* Options */
   .options { display: flex; flex-direction: column; gap: 9px; }
   .opt-btn {
     display: flex;
@@ -225,6 +240,7 @@
   }
   .opt-btn:disabled { cursor: default; transform: none; }
 
+  /* Feedback */
   .feedback {
     margin-top: 1rem;
     padding: 12px 16px;
@@ -239,6 +255,7 @@
   .feedback.nok { background: var(--pink-muted); color: #7a1a40; border: 1px solid #f0a0c0; }
   .feedback-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
 
+  /* Buttons */
   .btn-primary {
     width: 100%;
     padding: 13px 20px;
@@ -256,6 +273,7 @@
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
+  /* Score screen */
   .score-screen {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -304,12 +322,14 @@
 <body>
 <div class="container">
 
+  <!-- Header -->
   <div class="header">
     <div class="header-badge" id="header-badge"></div>
     <h1>GTM Weekly Quiz</h1>
-    <p>Sales &amp; Marketing Bi-Weekly. 5 kurze Fragen, schnell gemacht.</p>
+    <p>5 kurze Fragen, schnell gemacht.</p>
   </div>
 
+  <!-- Name Screen -->
   <div id="name-screen" class="name-screen">
     <div class="icon">👋</div>
     <h2>Wie heißt du?</h2>
@@ -318,6 +338,7 @@
     <button class="btn-primary" onclick="startQuiz()">Quiz starten →</button>
   </div>
 
+  <!-- Quiz Screen -->
   <div id="quiz-screen" class="hidden">
     <div class="progress-wrap">
       <div class="progress-meta">
@@ -329,6 +350,7 @@
     <div id="q-body"></div>
   </div>
 
+  <!-- Score Screen -->
   <div id="score-screen" class="score-screen hidden">
     <div class="score-circle">
       <div class="score-num" id="final-score">0</div>
@@ -336,8 +358,7 @@
     </div>
     <h2 id="final-title">Gut gemacht!</h2>
     <div class="msg" id="final-msg"></div>
-    <button class="btn-primary" id="submit-btn" onclick="submitScore()">Ergebnis abschicken</button>
-    <div class="sent-note hidden" id="sent-note"><span>✓ Abgeschickt!</span> Danke fürs Mitmachen.</div>
+    <div class="sent-note" id="sent-note"><span>✓ Abgeschickt!</span> Danke fürs Mitmachen.</div>
     <br/>
     <button class="btn-outline" onclick="restartQuiz()">Nochmal versuchen</button>
   </div>
@@ -357,6 +378,7 @@ const questions = [
   {
     topic: "Jobbörse Update",
     q: "Welcher Effekt hat die neue Stellen-Deduplizierung auf der Jobbörse nach 2 Wochen erzielt?",
+    type: "mc",
     opts: [
       "Doppelt so viele Bewerbungen wie vorher",
       "Von 17.032 auf über 91.000 Bewerbungen pro Woche",
@@ -364,11 +386,12 @@ const questions = [
       "Keine messbaren Effekte bisher"
     ],
     correct: 1,
-    explain: "Die Umstellung auf Stellen-Deduplizierung steigerte die Bewerbungen von 17.032 auf 91.179 pro Woche. Besonders stark in Logistik, Filialistik und Pflege-Ausbildung."
+    explain: "Die Umstellung auf Stellen-Deduplizierung steigerte die Bewerbungen von 17.032 auf 91.179 pro Woche – besonders stark in Logistik, Filialistik und Pflege-Ausbildung."
   },
   {
     topic: "StepStone AllJobs Positionierung",
     q: "Was ist das zentrale Argument gegen StepStone AllJobs im Kundengespräch?",
+    type: "mc",
     opts: [
       "AllJobs ist deutlich teurer im Gesamtpreis",
       "AllJobs hat keinen Performance-Algorithmus",
@@ -376,11 +399,12 @@ const questions = [
       "AllJobs bietet keine Festpreise an"
     ],
     correct: 2,
-    explain: "AllJobs behandelt alle Jobs gleich: ineffiziente Budgetverteilung. Durchschnittspreis sinkt, kritische Rollen werden teurer und schlechter besetzt. Festpreis ist keine echte Sicherheit, Performance ist es."
+    explain: "AllJobs behandelt alle Jobs gleich – ineffiziente Budgetverteilung. Durchschnittspreis sinkt, kritische Rollen werden teurer und schlechter besetzt. Festpreis ist keine echte Sicherheit, Performance ist es."
   },
   {
     topic: "Case Study Stadtverwaltung Konstanz",
-    q: "Warum eignet sich HeyJobs besonders gut für den öffentlichen Sektor, wie das Beispiel Stadtverwaltung Konstanz zeigt?",
+    q: "Warum eignet sich HeyJobs besonders gut für den öffentlichen Sektor – wie das Beispiel Stadtverwaltung Konstanz zeigt?",
+    type: "mc",
     opts: [
       "HeyJobs bietet spezielle Behörden-Rabatte",
       "REACH erreicht passive Kandidat:innen auch bei eingeschränkter Social-Media-Nutzung",
@@ -393,6 +417,7 @@ const questions = [
   {
     topic: "Produkt-Update REACH / HIRE",
     q: "Was zeigt das neue Feature im REACH-/HIRE-Produkt bezüglich abgelehnter Talente?",
+    type: "mc",
     opts: [
       "Abgelehnte Talente werden automatisch erneut angeschrieben",
       "Kandidat:innen können Ablehnungsgründe anfechten",
@@ -405,6 +430,7 @@ const questions = [
   {
     topic: "Bookit Migration",
     q: "Bis wann muss die Migration von YCBM auf Bookit abgeschlossen sein, und was passiert danach?",
+    type: "mc",
     opts: [
       "Bis 30. April; YCBM wird dann kostenpflichtig",
       "Bis 10. April; YCBM wird am 13. April abgeschaltet",
@@ -428,7 +454,7 @@ const ENTRIES = {
   percent: "entry.2089584864"
 };
 
-document.getElementById("page-title").textContent = `GTM Quiz, CW ${CW}`;
+document.getElementById("page-title").textContent = `GTM Quiz – CW ${CW}`;
 document.getElementById("header-badge").textContent = `CW ${CW} · ${YEAR}`;
 
 let userName = "";
@@ -482,6 +508,7 @@ function pick(i) {
   const isCorrect = i === q.correct;
   if (isCorrect) score++;
 
+  const letters = ["A", "B", "C", "D"];
   q.opts.forEach((_, idx) => {
     const btn = document.getElementById("opt" + idx);
     btn.disabled = true;
@@ -522,21 +549,23 @@ function showScore() {
   let msg = "Du hast " + score + " von " + questions.length + " Fragen richtig beantwortet (" + pct + "%). Schau dir die Themen nochmal an und bleib auf dem Laufenden!";
   if (score === questions.length) {
     title = "Perfekt! 🏆";
-    msg = "Alle 5 Fragen richtig. Du hast die Themen aus CW " + CW + " vollständig drauf. Top vorbereitet!";
+    msg = "Alle 5 Fragen richtig – du hast die Themen aus CW " + CW + " vollständig drauf. Top vorbereitet!";
   } else if (score >= 4) {
     title = "Fast perfekt! ⭐";
-    msg = score + " von 5 richtig (" + pct + "%). Sehr solide. Du bist gut für Kundengespräche gewappnet.";
+    msg = score + " von 5 richtig (" + pct + "%) – sehr solide. Du bist gut für Kundengespräche gewappnet.";
   } else if (score >= 3) {
     title = "Gut gemacht!";
-    msg = score + " von 5 richtig (" + pct + "%). Die Grundlagen sitzen. Ein nochmaliges Durchlesen lohnt sich.";
+    msg = score + " von 5 richtig (" + pct + "%). Die Grundlagen sitzen – ein nochmaliges Durchlesen lohnt sich.";
   } else {
     title = "Noch Luft nach oben";
-    msg = score + " von 5 richtig (" + pct + "%). Schau dir die CW " + CW + " Updates nochmal an. Die Themen sind wichtig für den Alltag.";
+    msg = score + " von 5 richtig (" + pct + "%). Schau dir die CW " + CW + " Updates nochmal an – die Themen sind wichtig für den Alltag.";
   }
 
   document.getElementById("final-title").textContent = title;
   document.getElementById("final-msg").textContent = msg;
   document.getElementById("score-screen").classList.remove("hidden");
+
+  submitScore();
 }
 
 function submitScore() {
@@ -550,16 +579,11 @@ function submitScore() {
 
   const img = new Image();
   img.src = url;
-
-  document.getElementById("submit-btn").disabled = true;
-  document.getElementById("sent-note").classList.remove("hidden");
 }
 
 function restartQuiz() {
   current = 0; score = 0; answered = false;
   document.getElementById("score-screen").classList.add("hidden");
-  document.getElementById("sent-note").classList.add("hidden");
-  document.getElementById("submit-btn").disabled = false;
   document.getElementById("quiz-screen").classList.remove("hidden");
   renderQ();
 }
