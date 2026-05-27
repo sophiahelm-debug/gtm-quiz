@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
     --gold: #E6AF14;
     --gold-muted: #FFF6DC;
@@ -24,7 +24,7 @@
     --radius: 12px;
     --radius-sm: 8px;
   }
-
+ 
   body {
     font-family: 'IBM Plex Sans', sans-serif;
     background: var(--bg);
@@ -32,12 +32,12 @@
     min-height: 100vh;
     padding: 2rem 1rem 3rem;
   }
-
+ 
   .container {
     max-width: 640px;
     margin: 0 auto;
   }
-
+ 
   /* Header */
   .header {
     text-align: center;
@@ -66,7 +66,7 @@
     font-size: 14px;
     color: var(--text-muted);
   }
-
+ 
   /* Progress */
   .progress-wrap {
     margin-bottom: 1.75rem;
@@ -91,7 +91,7 @@
     border-radius: 99px;
     transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
   }
-
+ 
   /* Name screen */
   .name-screen {
     background: var(--surface);
@@ -135,7 +135,7 @@
     margin-bottom: 1rem;
   }
   .name-input:focus { border-color: var(--gold); }
-
+ 
   /* Question card */
   .q-card {
     background: white;
@@ -163,7 +163,7 @@
     color: var(--text);
     margin-bottom: 1.25rem;
   }
-
+ 
   /* Options */
   .options { display: flex; flex-direction: column; gap: 9px; }
   .opt-btn {
@@ -239,7 +239,7 @@
     color: white;
   }
   .opt-btn:disabled { cursor: default; transform: none; }
-
+ 
   /* Feedback */
   .feedback {
     margin-top: 1rem;
@@ -254,7 +254,7 @@
   .feedback.ok { background: #edf8f2; color: #1a5c33; border: 1px solid #b0dfc0; }
   .feedback.nok { background: var(--pink-muted); color: #7a1a40; border: 1px solid #f0a0c0; }
   .feedback-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
+ 
   /* Buttons */
   .btn-primary {
     width: 100%;
@@ -272,7 +272,7 @@
   .btn-primary:hover { background: var(--gold-dark); }
   .btn-primary:active { transform: scale(0.98); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
+ 
   /* Score screen */
   .score-screen {
     background: var(--surface);
@@ -314,21 +314,21 @@
     transition: background 0.15s;
   }
   .btn-outline:hover { background: var(--gold-muted); }
-
+ 
   .hidden { display: none; }
   .action-row { margin-top: 1rem; }
 </style>
 </head>
 <body>
 <div class="container">
-
+ 
   <!-- Header -->
   <div class="header">
     <div class="header-badge" id="header-badge"></div>
     <h1>GTM Weekly Quiz</h1>
     <p>5 kurze Fragen, schnell gemacht.</p>
   </div>
-
+ 
   <!-- Name Screen -->
   <div id="name-screen" class="name-screen">
     <div class="icon">👋</div>
@@ -337,7 +337,7 @@
     <input type="text" id="name-input" class="name-input" placeholder="Vorname Nachname" autocomplete="name" />
     <button class="btn-primary" onclick="startQuiz()">Quiz starten →</button>
   </div>
-
+ 
   <!-- Quiz Screen -->
   <div id="quiz-screen" class="hidden">
     <div class="progress-wrap">
@@ -349,7 +349,7 @@
     </div>
     <div id="q-body"></div>
   </div>
-
+ 
   <!-- Score Screen -->
   <div id="score-screen" class="score-screen hidden">
     <div class="score-circle">
@@ -362,9 +362,9 @@
     <br/>
     <button class="btn-outline" onclick="restartQuiz()">Nochmal versuchen</button>
   </div>
-
+ 
 </div>
-
+ 
 <script>
 // =====================================================
 // PRO WOCHE NUR DIESE ZWEI BEREICHE ÄNDERN:
@@ -373,7 +373,7 @@
 // =====================================================
 const CW = 22;
 const YEAR = 2026;
-
+ 
 const questions = [
   {
     topic: "MADITA",
@@ -392,12 +392,12 @@ const questions = [
     explain: "Die Pflicht trifft Arbeitgeber, nicht HeyJobs. Wir empfehlen aber dringend, eine realistische Gehaltsspanne direkt in die Anzeige aufzunehmen, weil Klicks, Bewerbungen und Hiring Success deutlich steigen. E-Mail vor dem Interview reicht gesetzlich aus, ist aber der schwächere Hebel."
   },
   {
-    topic: "Performance Data",
-    q: "Wie lange dauert es mit dem neuen Langdock-Workflow, Kunden-Performance-Daten zu bekommen, statt wie bisher 1 bis 2 Stunden manuell zusammenzukopieren?",
+    topic: "Webinare",
+    q: "Welches Webinar startet das HeyJobs-Programm nach der Mai-Pause?",
     type: "mc",
-    opts: ["~ 5 Minuten", "~ 60 Sekunden", "~ 10 Minuten", "~ 30 Sekunden"],
+    opts: ["Talentpool aufbauen mit Stefan Scheller und Henja Gassad", "Recruiting-Mythen aufdecken mit Sarah Böing", "EU-Entgelttransparenzrichtlinie Deep-Dive", "MADITA Cross-Sell-Training für Sales"],
     correct: 1,
-    explain: "Customer ID und Zeitraum ins Langdock-Formular eingeben, in rund 60 Sekunden kommt der Report mit fünf CSVs per Mail. Der Workflow ist gerade in Beta, finale Freigabe folgt in den nächsten Tagen."
+    explain: "Sarah Böing macht den Auftakt und deckt Recruiting-Mythen auf. Sie zeigt außerdem, wie man im Interview die am besten passenden Kandidat:innen erkennt. Stefan Scheller und Henja Gassad folgen danach mit dem Talentpool-Format."
   },
   {
     topic: "HeyDay",
@@ -416,7 +416,7 @@ const questions = [
     explain: "Rund 85 Prozent der KI-Empfehlungen referenzieren Drittseiten. Da meist nur 3 bis 5 Quellen pro Antwort genannt werden, wirkt jede Nennung überproportional stark. Drittseiten-Marketing ist deswegen eine unserer drei Säulen in der GEO/AEO-Strategie."
   }
 ];
-
+ 
 // =====================================================
 // AB HIER NICHTS MEHR ÄNDERN
 // =====================================================
@@ -428,15 +428,15 @@ const ENTRIES = {
   score:   "entry.1794277357",
   percent: "entry.2089584864"
 };
-
+ 
 document.getElementById("page-title").textContent = `GTM Quiz – CW ${CW}`;
 document.getElementById("header-badge").textContent = `CW ${CW} · ${YEAR}`;
-
+ 
 let userName = "";
 let current = 0;
 let score = 0;
 let answered = false;
-
+ 
 function startQuiz() {
   const val = document.getElementById("name-input").value.trim();
   if (!val) { document.getElementById("name-input").focus(); return; }
@@ -446,7 +446,7 @@ function startQuiz() {
   current = 0; score = 0;
   renderQ();
 }
-
+ 
 function renderQ() {
   answered = false;
   const q = questions[current];
@@ -454,7 +454,7 @@ function renderQ() {
   document.getElementById("q-counter").textContent = "Frage " + (current + 1) + " von " + total;
   document.getElementById("q-score").textContent = score + " richtig";
   document.getElementById("prog").style.width = (current / total * 100) + "%";
-
+ 
   const letters = ["A", "B", "C", "D"];
   const optsHTML = q.opts.map((o, i) =>
     `<button class="opt-btn" id="opt${i}" onclick="pick(${i})">
@@ -462,7 +462,7 @@ function renderQ() {
       <span>${o}</span>
     </button>`
   ).join("");
-
+ 
   document.getElementById("q-body").innerHTML = `
     <div class="q-card">
       <div class="q-topic">${q.topic}</div>
@@ -475,14 +475,14 @@ function renderQ() {
     </div>
   `;
 }
-
+ 
 function pick(i) {
   if (answered) return;
   answered = true;
   const q = questions[current];
   const isCorrect = i === q.correct;
   if (isCorrect) score++;
-
+ 
   const letters = ["A", "B", "C", "D"];
   q.opts.forEach((_, idx) => {
     const btn = document.getElementById("opt" + idx);
@@ -493,18 +493,18 @@ function pick(i) {
       btn.classList.add("wrong");
     }
   });
-
+ 
   const fb = document.getElementById("feedback");
   if (isCorrect) {
     fb.innerHTML = `<div class="feedback ok"><span class="feedback-icon">✓</span><span><strong>Richtig!</strong> ${q.explain}</span></div>`;
   } else {
     fb.innerHTML = `<div class="feedback nok"><span class="feedback-icon">✗</span><span><strong>Leider falsch.</strong> ${q.explain}</span></div>`;
   }
-
+ 
   document.getElementById("q-score").textContent = score + " richtig";
   document.getElementById("next-wrap").classList.remove("hidden");
 }
-
+ 
 function nextQ() {
   current++;
   if (current >= questions.length) {
@@ -513,13 +513,13 @@ function nextQ() {
     renderQ();
   }
 }
-
+ 
 function showScore() {
   document.getElementById("quiz-screen").classList.add("hidden");
   const pct = Math.round(score / questions.length * 100);
   document.getElementById("final-score").textContent = score;
   document.getElementById("prog").style.width = "100%";
-
+ 
   let title = "Gut gemacht!";
   let msg = "Du hast " + score + " von " + questions.length + " Fragen richtig beantwortet (" + pct + "%). Schau dir die Themen nochmal an und bleib auf dem Laufenden!";
   if (score === questions.length) {
@@ -535,14 +535,14 @@ function showScore() {
     title = "Noch Luft nach oben";
     msg = score + " von 5 richtig (" + pct + "%). Schau dir die CW " + CW + " Updates nochmal an – die Themen sind wichtig für den Alltag.";
   }
-
+ 
   document.getElementById("final-title").textContent = title;
   document.getElementById("final-msg").textContent = msg;
   document.getElementById("score-screen").classList.remove("hidden");
-
+ 
   submitScore();
 }
-
+ 
 function submitScore() {
   const pct = Math.round(score / questions.length * 100) + "%";
   const url = "https://docs.google.com/forms/d/" + FORM_ID + "/formResponse?" +
@@ -551,18 +551,18 @@ function submitScore() {
     ENTRIES.score + "=" + encodeURIComponent(score + "/" + questions.length) + "&" +
     ENTRIES.percent + "=" + encodeURIComponent(pct) +
     "&submit=Submit";
-
+ 
   const img = new Image();
   img.src = url;
 }
-
+ 
 function restartQuiz() {
   current = 0; score = 0; answered = false;
   document.getElementById("score-screen").classList.add("hidden");
   document.getElementById("quiz-screen").classList.remove("hidden");
   renderQ();
 }
-
+ 
 document.getElementById("name-input").addEventListener("keydown", function(e) {
   if (e.key === "Enter") startQuiz();
 });
